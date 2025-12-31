@@ -13,7 +13,7 @@
             --font-cursive: 'Alex Brush', cursive;
             --font-main: 'Montserrat', "PingFang TC", sans-serif;
             --transition: cubic-bezier(0.25, 1, 0.5, 1);
-        } 
+        }
 
         body { 
             background-color: var(--bg-color); 
@@ -58,7 +58,8 @@
             white-space: nowrap; z-index: 10;
         }
 
-        .view-section { display: none; animation: fadeIn 0.8s forwards; }
+        /* --- 修改點 1：頁面切換淡入時間改為 2s --- */
+        .view-section { display: none; animation: fadeIn 2s forwards; }
         .active { display: block; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
@@ -69,7 +70,9 @@
         .sub-card { width: 320px; height: 450px; }
 
         .photo-list { max-width: 1100px; margin: auto; padding: 0 20px; }
-        .photo-item { width: 100%; margin-bottom: 100px; opacity: 0; transform: translateY(30px); transition: 1s; }
+        
+        /* --- 修改點 2：照片滑動出現時間改為 2s --- */
+        .photo-item { width: 100%; margin-bottom: 100px; opacity: 0; transform: translateY(30px); transition: 2s; }
         .photo-item.visible { opacity: 1; transform: translateY(0); }
 
         .pricing-section { padding: 100px 20px; background: #080808; display: none; }
@@ -173,7 +176,6 @@
             product: `<div class="price-card"><h3>商品形象方案</h3><span class="price">NT$ 800 / 張</span><ul><li>高質感光影營造</li><li>複合式光源技術</li><li>高階材質精修</li></ul></div>`
         };
 
-        // --- 核心改動：處理返回邏輯 ---
         let viewHistory = ['home-view'];
 
         function switchView(viewId, pushState = true) {
@@ -189,16 +191,15 @@
 
         function goBack() {
             if (viewHistory.length > 1) {
-                history.back(); // 這會觸發 popstate 事件
+                history.back();
             }
         }
 
-        // 監聽瀏覽器返回鍵 (popstate)
         window.onpopstate = function(event) {
             if (viewHistory.length > 1) {
-                viewHistory.pop(); // 移除當前
+                viewHistory.pop();
                 const previousView = viewHistory[viewHistory.length - 1];
-                switchView(previousView, false); // 切換回前一個，但不重複紀錄 history
+                switchView(previousView, false);
             }
         };
 
@@ -208,7 +209,6 @@
             switchView('gallery-view');
             document.getElementById('gallery-title').innerText = title;
             
-            // 更新底部按鈕文字與邏輯
             const btnText = fromView === 'sub-view' ? '← BACK TO PORTRAIT CATEGORIES' : '← BACK TO CATEGORIES';
             document.getElementById('gallery-back-btn').innerText = btnText;
             document.getElementById('gallery-bottom-back-btn').innerText = btnText;
@@ -240,7 +240,6 @@
             });
         });
 
-        // 初始化一筆 history 狀態
         history.replaceState({ viewId: 'home-view' }, "");
     </script>
 </body>
