@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sean Work Photography | Professional Portfolio</title>
-    <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Montserrat:wght@200;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root {
@@ -12,122 +12,176 @@
             --text-color: #ffffff;
             --font-cursive: 'Alex Brush', cursive;
             --font-main: 'Montserrat', "PingFang TC", sans-serif;
-            --transition: cubic-bezier(0.25, 1, 0.5, 1);
+            --transition: cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         body { 
-            background-color: var(--bg-color); 
-            color: var(--text-color); 
-            margin: 0; 
-            font-family: var(--font-main);
-            overflow-x: hidden;
+            background-color: var(--bg-color); color: var(--text-color); 
+            margin: 0; font-family: var(--font-main); overflow-x: hidden;
+        }
+
+        /* --- 開場動畫 --- */
+        #splash-screen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #000; z-index: 10000;
+            display: flex; justify-content: center; align-items: center;
+            flex-direction: column; overflow: hidden;
+        }
+        .bokeh {
+            position: absolute; width: 100%; height: 100%;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(255,255,255,0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(255,255,255,0.05) 0%, transparent 50%);
+            filter: blur(30px); animation: bokehMove 10s infinite alternate;
+        }
+        .light-sweep {
+            position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transform: skewX(-20deg); animation: sweep 3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+        .splash-container { position: relative; text-align: center; z-index: 2; }
+        .splash-cursive {
+            font-family: var(--font-cursive); font-size: clamp(4rem, 10vw, 7rem);
+            color: transparent; background: linear-gradient(90deg, #fff, #ccc, #fff);
+            background-size: 200% auto; -webkit-background-clip: text; background-clip: text;
+            opacity: 0; transform: translateY(20px);
+            animation: cursiveReveal 1.5s 0.5s forwards, shineText 3s infinite linear;
+        }
+        .splash-modern {
+            font-family: var(--font-main); font-size: clamp(0.8rem, 2vw, 1.2rem);
+            font-weight: 200; letter-spacing: 5px; color: rgba(255,255,255,0.7);
+            margin-top: 20px; opacity: 0; transform: translateY(20px);
+            animation: modernReveal 1.5s 1.5s forwards;
+        }
+        @keyframes cursiveReveal { to { opacity: 1; transform: translateY(0); } }
+        @keyframes modernReveal { to { opacity: 1; transform: translateY(0); letter-spacing: 12px; } }
+        @keyframes shineText { to { background-position: 200% center; } }
+        @keyframes sweep { to { left: 100%; } }
+        @keyframes bokehMove { to { transform: scale(1.2) rotate(5deg); } }
+        .splash-hidden { 
+            opacity: 0; visibility: hidden; pointer-events: none; 
+            transition: 1.5s cubic-bezier(0.7, 0, 0.3, 1); filter: blur(10px) brightness(1.5);
         }
 
         header { padding: 60px 20px 40px 20px; text-align: center; }
-        .logo { font-family: var(--font-cursive); font-size: clamp(3rem, 10vw, 5rem); cursor: pointer; color: #fff; text-decoration: none; }
+        .logo { 
+            font-family: var(--font-cursive); font-size: clamp(3rem, 10vw, 5rem); 
+            cursor: pointer; color: #fff; text-decoration: none; 
+            transition: letter-spacing 0.8s var(--transition); display: inline-block; letter-spacing: 0px;
+        }
+        .logo:hover { letter-spacing: 12px; }
+
+        .marquee {
+            width: 100%; overflow: hidden; white-space: nowrap;
+            padding: 20px 0; border-top: 1px solid rgba(255,255,255,0.05); border-bottom: 1px solid rgba(255,255,255,0.05);
+            margin-bottom: 50px; background: rgba(255,255,255,0.02);
+        }
+        .marquee span {
+            display: inline-block; animation: marquee 25s linear infinite;
+            font-size: 0.8rem; letter-spacing: 10px; text-transform: uppercase; color: #444;
+        }
+        @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
 
         .home-stack {
-            display: grid;
-            grid-template-columns: 1fr 1.5fr 1fr;
-            grid-template-rows: repeat(2, 1fr);
-            gap: 20px;
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 20px;
+            display: grid; grid-template-columns: 1fr 1.5fr 1fr; grid-template-rows: repeat(2, 1fr);
+            gap: 20px; max-width: 1400px; margin: 0 auto; padding: 20px;
         }
-
         .card { position: relative; overflow: hidden; background: #000; cursor: pointer; }
         .card-portrait { grid-column: 1; grid-row: 1 / 3; } 
         .card-food     { grid-column: 2; grid-row: 1; }
         .card-space    { grid-column: 2; grid-row: 2; }
         .card-product  { grid-column: 3; grid-row: 1 / 3; }
-
         .img-wrapper { width: 100%; height: 100%; overflow: hidden; position: relative; }
-        .card img { 
-            width: 100%; height: 115%; 
-            object-fit: cover;
-            transition: transform 0.8s var(--transition);
-            display: block;
-        }
+        .card img { width: 100%; height: 120%; object-fit: cover; transition: transform 1.2s var(--transition); }
         .card:hover img { transform: scale(1.1); }
-
         .card-title {
             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            font-size: 1.5rem; letter-spacing: 5px; border: 1px solid rgba(255,255,255,0.7);
-            padding: 12px 25px; background: rgba(0,0,0,0.4); backdrop-filter: blur(5px);
-            white-space: nowrap; z-index: 10;
+            font-size: clamp(1rem, 2vw, 1.3rem); letter-spacing: 5px; border: 1px solid rgba(255,255,255,0.5);
+            padding: 15px 30px; background: rgba(0,0,0,0.4); backdrop-filter: blur(8px);
+            z-index: 10; white-space: nowrap; color: #fff; pointer-events: none;
         }
 
-        .view-section { display: none; animation: fadeIn 2s forwards; }
-        .active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .photo-list { max-width: 1200px; margin: auto; padding: 0 20px; display: flex; flex-direction: column; align-items: center; }
+        .photo-item { margin-bottom: 120px; opacity: 0; transition: all 1.8s var(--transition); }
+        .photo-item.visible { opacity: 1; transform: translate(0) scale(1); }
+        .anim-up { transform: translateY(80px); }
+        .anim-left { transform: translateX(-50px); }
+        .anim-right { transform: translateX(50px); }
+        .anim-zoom { transform: scale(0.9); }
 
-        .back-btn { cursor: pointer; margin: 40px 0; color: #888; letter-spacing: 3px; font-size: 0.9rem; border: none; background: none; }
-        .back-btn:hover { color: #fff; }
+        .size-small { width: 45%; max-width: 400px; }      
+        .size-portrait { width: 60%; max-width: 750px; }   
+        .size-medium { width: 80%; max-width: 950px; }     
+        .size-large { width: 100%; max-width: 1200px; }    
+
+        .view-section { display: none; }
+        .active { display: block; animation: viewFade 1s forwards; }
+        @keyframes viewFade { from { opacity: 0; } to { opacity: 1; } }
+
+        .back-btn { cursor: pointer; margin: 40px 0; color: #666; letter-spacing: 4px; font-size: 0.8rem; border: none; background: none; transition: 0.3s; }
+        .back-btn:hover { color: #fff; letter-spacing: 6px; }
 
         .sub-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 30px; padding: 40px; }
         .sub-card { width: 320px; height: 450px; }
 
-        .photo-list { 
-            max-width: 1100px; 
-            margin: auto; 
-            padding: 0 20px; 
-            display: flex;
-            flex-direction: column;
-            align-items: center; /* 確保照片置中 */
-        }
-        
-        .photo-item { width: 100%; margin-bottom: 100px; opacity: 0; transform: translateY(30px); transition: 2s; }
-        
-        /* 特別修正：讓證件照縮小 2 倍 (50%) */
-        .photo-item.small-photo { width: 50%; max-width: 400px; }
-        
-        .photo-item.visible { opacity: 1; transform: translateY(0); }
-
-        .pricing-section { padding: 100px 20px; background: #080808; display: none; }
-        .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; max-width: 1200px; margin: 40px auto; }
-        .price-card { background: #111; padding: 40px 30px; border: 1px solid #222; text-align: left; }
-        .price-card h3 { border-bottom: 1px solid #333; padding-bottom: 15px; margin-top: 0; letter-spacing: 2px; }
-        .price-card .price { font-size: 1.4rem; color: #fff; margin: 20px 0; display: block; }
-        .price-card ul { padding: 0; list-style: none; color: #888; font-size: 0.9rem; line-height: 1.8; }
+        .pricing-section { padding: 100px 20px; background: #080808; margin-top: 100px; }
+        .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; max-width: 1200px; margin: 40px auto; }
+        .price-card { background: #111; padding: 50px 35px; border: 1px solid #222; transition: 0.5s; }
+        .price-card:hover { border-color: #555; transform: translateY(-5px); background: #151515; }
+        .price-card h3 { border-bottom: 1px solid #333; padding-bottom: 15px; letter-spacing: 3px; font-weight: 400; color: #fff; margin-top: 0; }
+        .price-card .price { font-size: 1.6rem; color: #fff; margin: 20px 0; display: block; font-weight: 600; }
+        .price-card p { color: #999; font-size: 0.9rem; line-height: 1.8; margin: 0; letter-spacing: 1px; }
+        .price-card ul { padding: 0; list-style: none; color: #999; font-size: 0.88rem; line-height: 2.2; }
+        .price-card ul li::before { content: "•"; margin-right: 10px; color: #555; }
 
         footer { padding: 80px 20px; text-align: center; border-top: 1px solid #111; }
-        .footer-title { font-size: 0.75rem; letter-spacing: 4px; color: #555; margin-bottom: 30px; }
-        .social-links { display: flex; justify-content: center; gap: 25px; }
         .social-btn {
-            width: 55px; height: 55px; border: 1px solid #333; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            color: #fff; text-decoration: none; font-size: 1.4rem;
-            transition: 0.4s var(--transition);
+            width: 55px; height: 55px; border: 1px solid #222; border-radius: 50%;
+            display: inline-flex; align-items: center; justify-content: center;
+            color: #fff; text-decoration: none; font-size: 1.4rem; margin: 0 10px; transition: 0.4s;
         }
-        .social-btn:hover { background: #fff; color: #000; border-color: #fff; transform: translateY(-8px); }
+        .social-btn:hover { background: #fff; color: #000; transform: translateY(-5px); }
+        .copyright { margin-top: 30px; color: #fff; font-size: 0.65rem; letter-spacing: 2px; opacity: 0.8; }
 
-        @media (max-width: 600px) { 
+        @media (max-width: 800px) { 
             .home-stack { display: flex; flex-direction: column; } 
-            .photo-item.small-photo { width: 80%; } /* 手機版不要縮太小 */
+            .size-small, .size-portrait, .size-medium, .size-large { width: 95% !important; max-width: none; }
         }
     </style>
 </head>
 <body>
 
-    <header onclick="window.location.reload()"><div class="logo">Sean Work</div></header>
+    <div id="splash-screen">
+        <div class="bokeh"></div>
+        <div class="light-sweep"></div>
+        <div class="splash-container">
+            <div class="splash-cursive">Sean Work</div>
+            <div class="splash-modern">PROFESSIONAL PHOTOGRAPHY</div>
+        </div>
+    </div>
+
+    <header><div class="logo" onclick="window.location.reload()">Sean Work</div></header>
 
     <div id="home-view" class="view-section active">
+        <div class="marquee">
+            <span>Beyond the lens • Capturing soul • Portfolio • Portrait • Food • Space • Sean Work • </span>
+            <span>Beyond the lens • Capturing soul • Portfolio • Portrait • Food • Space • Sean Work • </span>
+        </div>
         <div class="home-stack">
             <div class="card card-portrait" onclick="showSubView()">
-                <div class="img-wrapper"><img src="images人像/日系作品/日系人像1.jpg" class="parallax-img"></div>
+                <div class="img-wrapper"><img src="images人像/情緒作品/情緒人像1.jpg"></div>
                 <div class="card-title">PORTRAIT 人像</div>
             </div>
             <div class="card card-food" onclick="showGallery('FOOD 美食', '美食/美食', 11, 'home-view', 'food')">
-                <div class="img-wrapper"><img src="images美食/美食1.jpg" class="parallax-img"></div>
+                <div class="img-wrapper"><img src="images美食/美食1.jpg"></div>
                 <div class="card-title">FOOD 美食</div>
             </div>
             <div class="card card-space" onclick="showGallery('SPACE 空間', '空間/空間', 10, 'home-view', 'space')">
-                <div class="img-wrapper"><img src="images空間/空間1.jpg" class="parallax-img"></div>
+                <div class="img-wrapper"><img src="images空間/空間1.jpg"></div>
                 <div class="card-title">SPACE 空間</div>
             </div>
             <div class="card card-product" onclick="showGallery('PRODUCT 商品', '商品/商品', 10, 'home-view', 'product')">
-                <div class="img-wrapper"><img src="images商品/商品1.jpg" class="parallax-img"></div>
+                <div class="img-wrapper"><img src="images商品/商品1.jpg"></div>
                 <div class="card-title">PRODUCT 商品</div>
             </div>
         </div>
@@ -155,41 +209,125 @@
                 <div class="img-wrapper"><img src="images人像/畢業照 證件照/畢業照1.jpg"></div><div class="card-title">畢業證件</div>
             </div>
         </div>
-        <center><button class="back-btn" onclick="goBack()">← BACK TO CATEGORIES</button></center>
     </div>
 
     <div id="gallery-view" class="view-section">
-        <center><button id="gallery-back-btn" class="back-btn" onclick="goBack()">← CLOSE GALLERY</button></center>
-        <h2 id="gallery-title" style="text-align:center; letter-spacing:10px; font-weight:300; margin-bottom:60px;"></h2>
+        <center><button class="back-btn" onclick="goBack()">← BACK TO CATEGORIES</button></center>
+        <h2 id="gallery-title" style="text-align:center; letter-spacing:15px; font-weight:300; margin-bottom:80px; text-transform: uppercase;"></h2>
         <div class="photo-list" id="photo-list"></div>
-        
         <div id="pricing-area" class="pricing-section">
-            <h2 style="text-align:center; font-family: var(--font-cursive); font-size: 3rem; margin-bottom: 40px;">Investment</h2>
-            <div class="pricing-grid" id="pricing-content"></div>
-            <center><button id="gallery-bottom-back-btn" class="back-btn" onclick="goBack()">← CLOSE GALLERY</button></center>
+            <h2 style="text-align:center; font-family: var(--font-cursive); font-size: 3.5rem; font-weight: 400; margin-bottom: 40px;">Investment</h2>
+            <div id="pricing-content" class="pricing-grid"></div>
+            <center><button class="back-btn" onclick="goBack()">← BACK TO CATEGORIES</button></center>
         </div>
     </div>
 
     <footer>
-        <div class="footer-title">CONTACT SEAN WORK</div>
         <div class="social-links">
-            <a href="https://line.me/ti/p/~0952298215" target="_blank" class="social-btn" title="Line">
-                <i class="fa-brands fa-line"></i>
-            </a>
-            <a href="https://www.instagram.com/liang_photo1208/" target="_blank" class="social-btn" title="Instagram">
-                <i class="fa-brands fa-instagram"></i>
-            </a>
+            <a href="https://line.me/ti/p/~0952298215" target="_blank" class="social-btn"><i class="fa-brands fa-line"></i></a>
+            <a href="https://www.instagram.com/liang_photo1208/" target="_blank" class="social-btn"><i class="fa-brands fa-instagram"></i></a>
         </div>
-        <p style="margin-top: 40px; color: #333; font-size: 0.6rem; letter-spacing: 2px;">&copy; 2025 SEAN WORK PHOTOGRAPHY. ALL RIGHTS RESERVED.</p>
+        <p class="copyright">&copy; 2025 SEAN WORK PHOTOGRAPHY.</p>
     </footer>
 
     <script>
-        const pricing = {
-            portrait: `<div class="price-card"><h3>個人寫真方案</h3><span class="price">NT$ 3,500</span><ul><li>拍攝 1.5 - 2 小時</li><li>精修 15 張 / 毛片全給</li><li>適合個人品牌</li></ul></div><div class="price-card"><h3>情侶寫真</h3><span class="price">NT$ 5,500</span><ul><li>拍攝 3 小時</li><li>精修 30 張 / 專屬調色</li><li>情緒引導與風格建議</li></ul></div>`,
-            food: `<div class="price-card"><h3>單品去背方案</h3><span class="price">NT$ 300 / 張</span><ul><li>專業去背製作</li><li>包含光影微調</li><li>量大另有優惠</li></ul></div><div class="price-card"><h3>情境商攝方案</h3><span class="price">NT$ 3,500 / 次</span><ul><li>含桌面陳列佈置</li><li>2 小時拍攝 / 適合社群行銷</li><li>商業版權授權</li></ul></div>`,
-            space: `<div class="price-card"><h3>室內設計方案</h3><span class="price">NT$ 5,000 Up</span><ul><li>HDR 多重曝光合成</li><li>垂直校正 / 超廣角拍攝</li><li>包含全景與局部細節</li></ul></div><div class="price-card"><h3>商業建築方案</h3><span class="price">NT$ 10,000 Up</span><ul><li>含晨昏光影捕捉</li><li>建案宣傳用高階修圖</li><li>全時段拍攝 (拍到完為止)</li></ul></div>`,
-            product: `<div class="price-card"><h3>商品形象方案</h3><span class="price">NT$ 800 / 張</span><ul><li>高質感光影營造</li><li>複合式光源技術</li><li>高階材質精修</li></ul></div>`,
-            id_photo: `<div class="price-card"><h3>基礎證件照方案</h3><span class="price">NT$ 300</span><ul><li>客製化精修與對比調整</li><li>高畫質數位檔 (大頭與半身)</li><li>含實體照片沖印 8 張</li></ul></div><div class="price-card"><h3>畢業紀念方案</h3><span class="price">NT$ 800</span><ul><li>學士服半身情境拍攝</li><li>精修 2 張 / 數位檔全給</li><li>含實體照片沖印 8 張</li></ul></div>`
+        window.addEventListener('load', () => {
+            setTimeout(() => { document.getElementById('splash-screen').classList.add('splash-hidden'); }, 3500); 
+        });
+
+        const pricingData = {
+            portrait: `
+                <div class="price-card">
+                    <h3>個人寫真</h3>
+                    <span class="price">NT$ 2,000</span>
+                    <ul>
+                        <li>服務時長：90 分鐘深度拍攝</li>
+                        <li>交付內容：12 張精修 (細膩膚質/光影校正)</li>
+                        <li>毛片保障：當日所有拍攝原檔全給 (雲端下載)</li>
+                        <li>專業流程：含拍攝前服裝搭配與場景色彩建議</li>
+                    </ul>
+                </div>
+                <div class="price-card">
+                    <h3>雙人 / 情侶寫真</h3>
+                    <span class="price">NT$ 3,500</span>
+                    <ul>
+                        <li>服務時長：150 分鐘電影感雙人拍攝</li>
+                        <li>交付內容：25 張風格精修 (含氛圍調色/微美型)</li>
+                        <li>互動引導：攝影師專業動態導引，捕捉自然情感</li>
+                        <li>毛片保障：當日拍攝原檔全數交付 (雲端分享)</li>
+                    </ul>
+                </div>
+                <div class="price-card">
+                    <h3>全家福 / 團體紀錄</h3>
+                    <span class="price">NT$ 5,000 Up</span>
+                    <ul>
+                        <li>服務內容：包含家族大合照、分組照與側寫</li>
+                        <li>交付內容：30 張經典精修 (適合沖洗大圖)</li>
+                        <li>影像保固：色彩管理技術確保印製品不偏色</li>
+                        <li>毛片保障：所有拍攝毛片全數贈予，典藏時刻</li>
+                    </ul>
+                </div>`,
+            food: `
+                <div class="price-card">
+                    <h3>美食影像美學</h3>
+                    <span class="price">NT$ 3,500 / 次</span>
+                    <ul>
+                        <li>服務範疇：單次服務最高包含 10 道菜品紀錄</li>
+                        <li>交付內容：15 張高解析度情境美編照片</li>
+                        <li>光影技術：專屬美食打光技術，呈現食物垂涎質感</li>
+                    </ul>
+                </div>
+                <div class="price-card">
+                    <h3>專業影像去背</h3>
+                    <span class="price">NT$ 300 / 張</span>
+                    <ul>
+                        <li>服務內容：精細鋼筆路徑去背 (Clipping Path)</li>
+                        <li>影像處理：含自然陰影重塑、色彩平衡優化</li>
+                        <li>交付格式：透明 PNG 與商用高解析度檔案</li>
+                    </ul>
+                </div>`,
+            space: `
+                <div class="price-card">
+                    <h3>室內空間影像</h3>
+                    <span class="price">NT$ 3,000 Up</span>
+                    <ul>
+                        <li>適用對象：30 坪以內一般住宅、單層公寓</li>
+                        <li>交付內容：15 張精修空間照片</li>
+                        <li>技術優勢：專業廣角透視修正，避免線條變形</li>
+                        <li>後期處理：多重曝光 HDR 技術，還原室內外光比</li>
+                    </ul>
+                </div>
+                <div class="price-card">
+                    <h3>建築商用攝影</h3>
+                    <span class="price">NT$ 5,000 Up</span>
+                    <ul>
+                        <li>適用對象：30 - 60 坪商用空間、豪宅、餐廳</li>
+                        <li>服務內容：全場域多角度捕捉、日夜景色彩校正</li>
+                        <li>技術細節：包含燈光配置與材質紋理細節強化</li>
+                        <li>授權說明：包含品牌行銷使用授權 (不限平台)</li>
+                        <li>交付內容：20 張以上高質感完稿照片</li>
+                    </ul>
+                </div>`,
+            product: `
+                <div class="price-card">
+                    <h3>商業產品攝影</h3>
+                    <span class="price">NT$ 800 / 張</span>
+                    <ul>
+                        <li>核心技術：精準控制反射與紋理 (金屬/玻璃/皮革)</li>
+                        <li>極致修圖：手工移除雜塵、刮痕與不完美反射</li>
+                        <li>授權：包含商業用途授權，不限轉載平台</li>
+                    </ul>
+                </div>`,
+            id_photo: `
+                <div class="price-card">
+                    <h3>韓式證件照</h3>
+                    <span class="price">NT$ 300</span>
+                    <ul>
+                        <li>精緻修圖：一對一對位調整、膚色與髮緣細膩修補</li>
+                        <li>交付：實體 2 吋相片 8 張 + 高解析數位檔</li>
+                        <li>保障：符合護照/身分證最新官方規範</li>
+                    </ul>
+                </div>`
         };
 
         let viewHistory = ['home-view'];
@@ -197,25 +335,18 @@
         function switchView(viewId, pushState = true) {
             document.querySelectorAll('.view-section').forEach(v => v.classList.remove('active'));
             document.getElementById(viewId).classList.add('active');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-
+            window.scrollTo(0, 0);
             if (pushState && viewId !== viewHistory[viewHistory.length - 1]) {
                 viewHistory.push(viewId);
                 history.pushState({ viewId: viewId }, "");
             }
         }
 
-        function goBack() {
-            if (viewHistory.length > 1) {
-                history.back();
-            }
-        }
-
-        window.onpopstate = function(event) {
+        function goBack() { if (viewHistory.length > 1) history.back(); }
+        window.onpopstate = function() {
             if (viewHistory.length > 1) {
                 viewHistory.pop();
-                const previousView = viewHistory[viewHistory.length - 1];
-                switchView(previousView, false);
+                switchView(viewHistory[viewHistory.length - 1], false);
             }
         };
 
@@ -224,43 +355,37 @@
         function showGallery(title, folderPath, count, fromView, type) {
             switchView('gallery-view');
             document.getElementById('gallery-title').innerText = title;
-            
-            const btnText = fromView === 'sub-view' ? '← BACK TO PORTRAIT CATEGORIES' : '← BACK TO CATEGORIES';
-            document.getElementById('gallery-back-btn').innerText = btnText;
-            document.getElementById('gallery-bottom-back-btn').innerText = btnText;
-
             const list = document.getElementById('photo-list');
             list.innerHTML = '';
+            
+            let sizeClass = 'size-medium';
+            if (type === 'portrait') sizeClass = 'size-portrait';
+            if (type === 'id_photo') sizeClass = 'size-small';
+            if (type === 'food' || type === 'space') sizeClass = 'size-large';
+
+            const animations = ['anim-up', 'anim-left', 'anim-right', 'anim-zoom'];
+
             for (let i = 1; i <= count; i++) {
                 const img = document.createElement('img');
                 img.src = `images${folderPath}${i}.jpg`;
-                img.className = 'photo-item';
-                
-                // 如果是證件照類別，加入專用的 CSS Class
-                if (type === 'id_photo') {
-                    img.classList.add('small-photo');
-                }
-                
+                const randomAnim = animations[Math.floor(Math.random() * animations.length)];
+                img.className = `photo-item ${sizeClass} ${randomAnim}`;
                 list.appendChild(img);
             }
 
-            document.getElementById('pricing-content').innerHTML = pricing[type] || '';
-            document.getElementById('pricing-area').style.display = 'block';
+            document.getElementById('pricing-content').innerHTML = pricingData[type] || '';
+            document.getElementById('pricing-area').style.display = (pricingData[type]) ? 'block' : 'none';
 
             const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        setTimeout(() => entry.target.classList.add('visible'), 50);
+                    }
+                });
             }, { threshold: 0.1 });
+
             setTimeout(() => document.querySelectorAll('.photo-item').forEach(el => observer.observe(el)), 100);
         }
-
-        window.addEventListener('scroll', () => {
-            document.querySelectorAll('.parallax-img').forEach(img => {
-                const rect = img.parentElement.getBoundingClientRect();
-                if (rect.top < window.innerHeight && rect.bottom > 0) {
-                    img.style.marginTop = `${rect.top * 0.08}px`;
-                }
-            });
-        });
 
         history.replaceState({ viewId: 'home-view' }, "");
     </script>
