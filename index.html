@@ -231,8 +231,9 @@
     </footer>
 
     <script>
+        // 開場動畫縮短至 1.7 秒 (1700 毫秒)
         window.addEventListener('load', () => {
-            setTimeout(() => { document.getElementById('splash-screen').classList.add('splash-hidden'); }, 3500); 
+            setTimeout(() => { document.getElementById('splash-screen').classList.add('splash-hidden'); }, 1700); 
         });
 
         const pricingData = {
