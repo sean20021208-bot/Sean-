@@ -58,7 +58,6 @@
             white-space: nowrap; z-index: 10;
         }
 
-        /* --- 修改點 1：頁面切換淡入時間改為 2s --- */
         .view-section { display: none; animation: fadeIn 2s forwards; }
         .active { display: block; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
@@ -71,7 +70,6 @@
 
         .photo-list { max-width: 1100px; margin: auto; padding: 0 20px; }
         
-        /* --- 修改點 2：照片滑動出現時間改為 2s --- */
         .photo-item { width: 100%; margin-bottom: 100px; opacity: 0; transform: translateY(30px); transition: 2s; }
         .photo-item.visible { opacity: 1; transform: translateY(0); }
 
@@ -139,6 +137,9 @@
             <div class="card sub-card" onclick="showGallery('STUDIO 攝影棚', '人像/攝影棚作品/棚拍人像', 9, 'sub-view', 'portrait')">
                 <div class="img-wrapper"><img src="images人像/攝影棚作品/棚拍人像1.jpg"></div><div class="card-title">攝影棚拍</div>
             </div>
+            <div class="card sub-card" onclick="showGallery('GRADUATION 畢業證件', '人像/畢業照 證件照/畢業照', 2, 'sub-view', 'id_photo')">
+                <div class="img-wrapper"><img src="images人像/畢業照 證件照/畢業照1.jpg"></div><div class="card-title">畢業證件</div>
+            </div>
         </div>
         <center><button class="back-btn" onclick="goBack()">← BACK TO CATEGORIES</button></center>
     </div>
@@ -173,7 +174,9 @@
             portrait: `<div class="price-card"><h3>個人寫真方案</h3><span class="price">NT$ 3,500</span><ul><li>拍攝 1.5 - 2 小時</li><li>精修 15 張 / 毛片全給</li><li>適合個人品牌</li></ul></div><div class="price-card"><h3>情侶寫真</h3><span class="price">NT$ 5,500</span><ul><li>拍攝 3 小時</li><li>精修 30 張 / 專屬調色</li><li>情緒引導與風格建議</li></ul></div>`,
             food: `<div class="price-card"><h3>單品去背方案</h3><span class="price">NT$ 300 / 張</span><ul><li>專業去背製作</li><li>包含光影微調</li><li>量大另有優惠</li></ul></div><div class="price-card"><h3>情境商攝方案</h3><span class="price">NT$ 3,500 / 次</span><ul><li>含桌面陳列佈置</li><li>2 小時拍攝 / 適合社群行銷</li><li>商業版權授權</li></ul></div>`,
             space: `<div class="price-card"><h3>室內設計方案</h3><span class="price">NT$ 5,000 Up</span><ul><li>HDR 多重曝光合成</li><li>垂直校正 / 超廣角拍攝</li><li>包含全景與局部細節</li></ul></div><div class="price-card"><h3>商業建築方案</h3><span class="price">NT$ 10,000 Up</span><ul><li>含晨昏光影捕捉</li><li>建案宣傳用高階修圖</li><li>全時段拍攝 (拍到完為止)</li></ul></div>`,
-            product: `<div class="price-card"><h3>商品形象方案</h3><span class="price">NT$ 800 / 張</span><ul><li>高質感光影營造</li><li>複合式光源技術</li><li>高階材質精修</li></ul></div>`
+            product: `<div class="price-card"><h3>商品形象方案</h3><span class="price">NT$ 800 / 張</span><ul><li>高質感光影營造</li><li>複合式光源技術</li><li>高階材質精修</li></ul></div>`,
+            // 已經修改為您指定的 300 元方案
+            id_photo: `<div class="price-card"><h3>基礎證件照方案</h3><span class="price">NT$ 300</span><ul><li>客製化精修與對比調整</li><li>高畫質數位檔 (大頭與半身)</li><li>含實體照片沖印 8 張</li></ul></div><div class="price-card"><h3>畢業紀念方案</h3><span class="price">NT$ 800</span><ul><li>學士服半身情境拍攝</li><li>精修 2 張 / 數位檔全給</li><li>含實體照片沖印 8 張</li></ul></div>`
         };
 
         let viewHistory = ['home-view'];
