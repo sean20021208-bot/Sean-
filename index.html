@@ -68,9 +68,20 @@
         .sub-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 30px; padding: 40px; }
         .sub-card { width: 320px; height: 450px; }
 
-        .photo-list { max-width: 1100px; margin: auto; padding: 0 20px; }
+        .photo-list { 
+            max-width: 1100px; 
+            margin: auto; 
+            padding: 0 20px; 
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* 確保照片置中 */
+        }
         
         .photo-item { width: 100%; margin-bottom: 100px; opacity: 0; transform: translateY(30px); transition: 2s; }
+        
+        /* 特別修正：讓證件照縮小 2 倍 (50%) */
+        .photo-item.small-photo { width: 50%; max-width: 400px; }
+        
         .photo-item.visible { opacity: 1; transform: translateY(0); }
 
         .pricing-section { padding: 100px 20px; background: #080808; display: none; }
@@ -91,7 +102,10 @@
         }
         .social-btn:hover { background: #fff; color: #000; border-color: #fff; transform: translateY(-8px); }
 
-        @media (max-width: 900px) { .home-stack { display: flex; flex-direction: column; } }
+        @media (max-width: 600px) { 
+            .home-stack { display: flex; flex-direction: column; } 
+            .photo-item.small-photo { width: 80%; } /* 手機版不要縮太小 */
+        }
     </style>
 </head>
 <body>
@@ -175,7 +189,6 @@
             food: `<div class="price-card"><h3>單品去背方案</h3><span class="price">NT$ 300 / 張</span><ul><li>專業去背製作</li><li>包含光影微調</li><li>量大另有優惠</li></ul></div><div class="price-card"><h3>情境商攝方案</h3><span class="price">NT$ 3,500 / 次</span><ul><li>含桌面陳列佈置</li><li>2 小時拍攝 / 適合社群行銷</li><li>商業版權授權</li></ul></div>`,
             space: `<div class="price-card"><h3>室內設計方案</h3><span class="price">NT$ 5,000 Up</span><ul><li>HDR 多重曝光合成</li><li>垂直校正 / 超廣角拍攝</li><li>包含全景與局部細節</li></ul></div><div class="price-card"><h3>商業建築方案</h3><span class="price">NT$ 10,000 Up</span><ul><li>含晨昏光影捕捉</li><li>建案宣傳用高階修圖</li><li>全時段拍攝 (拍到完為止)</li></ul></div>`,
             product: `<div class="price-card"><h3>商品形象方案</h3><span class="price">NT$ 800 / 張</span><ul><li>高質感光影營造</li><li>複合式光源技術</li><li>高階材質精修</li></ul></div>`,
-            // 已經修改為您指定的 300 元方案
             id_photo: `<div class="price-card"><h3>基礎證件照方案</h3><span class="price">NT$ 300</span><ul><li>客製化精修與對比調整</li><li>高畫質數位檔 (大頭與半身)</li><li>含實體照片沖印 8 張</li></ul></div><div class="price-card"><h3>畢業紀念方案</h3><span class="price">NT$ 800</span><ul><li>學士服半身情境拍攝</li><li>精修 2 張 / 數位檔全給</li><li>含實體照片沖印 8 張</li></ul></div>`
         };
 
@@ -222,6 +235,12 @@
                 const img = document.createElement('img');
                 img.src = `images${folderPath}${i}.jpg`;
                 img.className = 'photo-item';
+                
+                // 如果是證件照類別，加入專用的 CSS Class
+                if (type === 'id_photo') {
+                    img.classList.add('small-photo');
+                }
+                
                 list.appendChild(img);
             }
 
